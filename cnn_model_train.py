@@ -29,7 +29,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
 def get_image_size():
-    img = cv2.imread('gestures/A/A1.jpg', 0)
+    img = cv2.imread('gestures/0/A1.jpg', 0)
     return img.shape
 
 
@@ -53,7 +53,7 @@ def cnn_model():
 	model.add(Dropout(0.2))
 	model.add(Dense(num_of_classes, activation='sigmoid'))
 	sgd = optimizers.SGD(lr=1e-2)
-	model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
+	model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 	filepath="cnn_model_keras2.h5"
 	checkpoint1 = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 	callbacks_list = [checkpoint1]
@@ -85,7 +85,7 @@ def train():
     model.summary()
 
     model.fit(train_images, train_labels, validation_data=(
-        val_images, val_labels), epochs=6, batch_size=3, callbacks=callbacks_list)
+        val_images, val_labels), epochs=3, batch_size=3, callbacks=callbacks_list)
     scores = model.evaluate(val_images, val_labels, verbose=0)
     print("CNN Error: %.2f%%" % (100-scores[1]*100))
     model.save('cnn_model_keras2.h5')
