@@ -1,4 +1,3 @@
-
 import cv2
 from glob import glob
 import numpy as np
@@ -6,34 +5,28 @@ import random
 from sklearn.utils import shuffle
 import pickle
 import os
-global label
+label = 0
 
 
 def pickle_images_labels():
     images_labels = []
-    images = glob("gestures/A/*.jpg")
+    images = glob("gestures/*/*.jpg")
     images.sort()
-    label=0
-
+    label1=0
     for image in images:
-        # char = char
-        #  no = 0
-        #   while char < 91:
-        #        if chr(char) == image[11]:
-        #             no = char - 64
-        #             break
-        #         char = char + 1
         # print(image)
-        # label = image[image.find(os.sep)+1: image.rfind(os.sep)]
-
+        label1 = image[image.find(os.sep)+1: image.rfind(os.sep)]
+        # print(label1)
         img = cv2.imread(image, 0)
-        images_labels.append((np.array(img, dtype=np.int32), label))
-        label+=1
+        images_labels.append((np.array(img, dtype=np.uint8), (label1)))
+  
+  
     return images_labels
 
 
 images_labels = pickle_images_labels()
-print(images_labels)
+# print(len(images_labels))
+
 images_labels = shuffle(shuffle(shuffle(shuffle(images_labels))))
 images, labels = zip(*images_labels)
 print("Length of images_labels", len(images_labels))
@@ -41,27 +34,19 @@ print("Length of images_labels", len(images_labels))
 train_images = images[:int(5/6*len(images))]
 print("Length of train_images", len(train_images))
 with open("train_images", "wb") as f:
-
     pickle.dump(train_images, f)
-    # print(np.array(pickle.load(f), dtype=np.int32))
-# with open("train_images", "rb") as f:
-#        print(np.array(pickle.load(f), dtype=np.int32))
 del train_images
 
 train_labels = labels[:int(5/6*len(labels))]
 print("Length of train_labels", len(train_labels))
 with open("train_labels", "wb") as f:
     pickle.dump(train_labels, f)
-# with open("train_labels", "rb") as f:
-#     print(np.array(pickle.load(f), dtype=np.character))
 del train_labels
 
 test_images = images[int(5/6*len(images)):int(11/12*len(images))]
 print("Length of test_images", len(test_images))
 with open("test_images", "wb") as f:
     pickle.dump(test_images, f)
-# with open("test_labels", "rb") as f:
-#        print(np.array(pickle.load(f), dtype=np.int32))
 del test_images
 
 test_labels = labels[int(5/6*len(labels)):int(11/12*len(images))]
@@ -81,3 +66,19 @@ print("Length of val_labels", len(val_labels))
 with open("val_labels", "wb") as f:
     pickle.dump(val_labels, f)
 del val_labels
+
+
+with open("test_labels", "rb") as f:
+   print(np.array(pickle.load(f)))
+# del val_labels
+with open("train_labels", "rb") as f:
+   print(np.array(pickle.load(f)))
+with open("val_labels", "rb") as f:
+   print(np.array(pickle.load(f)))
+   
+with open("val_images", "rb") as f:
+    file = open("MyFile.txt","w")
+    file.write(str(np.array(pickle.load(f))))
+    file.close()
+    print(np.array(pickle.load(f)))
+   
