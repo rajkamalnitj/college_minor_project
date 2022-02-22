@@ -116,5 +116,5 @@ for one in range(65,68):
     if one >= 74:
         check = True
     g_name = chr(one)
-    store_in_db(g_id-64, g_name)
+    store_in_db(g_id-65, g_name)
     # store_images(g_id-65,check)
